@@ -54,22 +54,23 @@
         
         .header {
             text-align: center;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
             border-bottom: 3px solid var(--primary-color);
         }
         
         .header h1 {
-            font-size: 24px;
+            font-size: 22px;
             color: var(--text-dark);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             word-break: break-word;
         }
         
         .header p {
             color: var(--text-light);
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.4;
+            font-weight: 500;
         }
         
         /* Daily Quote Section */
@@ -81,6 +82,18 @@
             border-radius: 8px;
             text-align: center;
             box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .quote-label {
@@ -116,6 +129,12 @@
             border-radius: 50%;
             margin-left: 8px;
             vertical-align: middle;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
         
         .form-section {
@@ -282,6 +301,17 @@
             word-break: break-word;
         }
         
+        /* Reflection items box */
+        .reflection-item {
+            background: #f9f9f9;
+            padding: 12px;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+        
         .button-group {
             display: flex;
             flex-direction: column;
@@ -375,7 +405,7 @@
             }
             
             .header p {
-                font-size: 12px;
+                font-size: 13px;
             }
             
             .quote-section {
@@ -459,16 +489,16 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>📋 Daily Evening Page<span class="color-indicator"></span></h1>
-            <p>Personal Accountability Form</p>
-        </div>
-        
-        <!-- Daily Motivational Quote Section -->
+        <!-- Daily Motivational Quote Section - AT THE BEGINNING -->
         <div class="quote-section">
             <div class="quote-label">✨ Today's Inspiration</div>
             <div class="quote-text" id="quoteText">Loading today's quote...</div>
             <div class="quote-author" id="quoteAuthor"></div>
+        </div>
+        
+        <div class="header">
+            <h1>📋 Daily Evening Page<span class="color-indicator"></span></h1>
+            <p id="greeting">Good Evening 👋 - Fill your Evening Page and count yourself.</p>
         </div>
         
         <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
@@ -483,6 +513,31 @@
                         <label for="dayOfWeek">Day of Week</label>
                         <input type="text" id="dayOfWeek" name="dayOfWeek" placeholder="Monday" required>
                     </div>
+                </div>
+            </div>
+            
+            <!-- DAILY REFLECTION: GOOD, BAD & CHANGE -->
+            <div class="form-section">
+                <div class="section-header">🌟 TODAY'S REFLECTION</div>
+                
+                <div class="input-wrapper">
+                    <label>✅ Two good things I did today (1st)</label>
+                    <textarea name="goodThing1" placeholder="What went well today?"></textarea>
+                </div>
+                
+                <div class="input-wrapper">
+                    <label>✅ Two good things I did today (2nd)</label>
+                    <textarea name="goodThing2" placeholder="Another thing you're proud of..."></textarea>
+                </div>
+                
+                <div class="input-wrapper">
+                    <label>❌ One bad thing I did today</label>
+                    <textarea name="badThing" placeholder="What didn't go well? Be honest..."></textarea>
+                </div>
+                
+                <div class="input-wrapper">
+                    <label>🔄 One thing I did that I want to change</label>
+                    <textarea name="thingToChange" placeholder="What behavior or action will you change?"></textarea>
                 </div>
             </div>
             
@@ -731,27 +786,6 @@
                 </div>
             </div>
             
-            <!-- ACCOUNTABILITY PARTNER -->
-            <div class="form-section">
-                <div class="section-header">🔄 ACCOUNTABILITY PARTNER NOTES</div>
-                
-                <div class="row">
-                    <div class="input-wrapper">
-                        <label for="accountabilityPartner">Share this conclusion with</label>
-                        <input type="text" id="accountabilityPartner" name="accountabilityPartner" placeholder="Name">
-                    </div>
-                    <div class="input-wrapper">
-                        <label for="shareDate">Date shared</label>
-                        <input type="date" id="shareDate" name="shareDate">
-                    </div>
-                </div>
-                
-                <div class="input-wrapper">
-                    <label>Their observation/feedback</label>
-                    <textarea name="partnerFeedback" placeholder="What did they notice?"></textarea>
-                </div>
-            </div>
-            
             <!-- SUBMIT BUTTON -->
             <div class="button-group">
                 <button type="submit" class="btn-submit">📤 Submit Form</button>
@@ -766,7 +800,7 @@
     </div>
     
     <script>
-        // Daily motivational quotes database
+        // Comprehensive quotes database
         const quotes = [
             {
                 text: "An inheritance is easily lost; a habit is almost impossible to lose.",
@@ -827,36 +861,73 @@
                 author: "- Tony Robbins",
                 colorPrimary: "#d35400",
                 colorSecondary: "#ba4a00"
+            },
+            {
+                text: "Every accomplishment starts with the decision to try.",
+                author: "- John F. Kennedy",
+                colorPrimary: "#8e44ad",
+                colorSecondary: "#6c3483"
+            },
+            {
+                text: "The way to get started is to quit talking and begin doing.",
+                author: "- Walt Disney",
+                colorPrimary: "#1abc9c",
+                colorSecondary: "#16a085"
+            },
+            {
+                text: "Don't let yesterday take up too much of today.",
+                author: "- Will Rogers",
+                colorPrimary: "#f1c40f",
+                colorSecondary: "#d68910"
+            },
+            {
+                text: "You are never too old to set another goal or to dream a new dream.",
+                author: "- C.S. Lewis",
+                colorPrimary: "#e67e22",
+                colorSecondary: "#d35400"
+            },
+            {
+                text: "The only limit to our realization of tomorrow is our doubts of today.",
+                author: "- Franklin D. Roosevelt",
+                colorPrimary: "#34495e",
+                colorSecondary: "#2c3e50"
             }
         ];
         
-        // Function to get today's quote based on date
-        function getDailyQuote() {
-            const today = new Date();
-            const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
-            const quoteIndex = dayOfYear % quotes.length;
-            return quotes[quoteIndex];
+        // Function to get random quote
+        function getRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            return quotes[randomIndex];
         }
         
         // Function to apply theme colors
         function applyThemeColors() {
-            const quote = getDailyQuote();
+            const quote = getRandomQuote();
             document.documentElement.style.setProperty('--primary-color', quote.colorPrimary);
             document.documentElement.style.setProperty('--secondary-color', quote.colorSecondary);
             document.documentElement.style.setProperty('--accent-color', quote.colorPrimary);
         }
         
-        // Function to display today's quote
-        function displayDailyQuote() {
-            const quote = getDailyQuote();
+        // Function to display random quote
+        function displayRandomQuote() {
+            const quote = getRandomQuote();
             document.getElementById('quoteText').textContent = `"${quote.text}"`;
             document.getElementById('quoteAuthor').textContent = quote.author;
         }
         
-        // Initialize quote and theme on page load
+        // Function to get greeting based on time of day
+        function getGreeting() {
+            const hour = new Date().getHours();
+            if (hour < 12) return "Good Morning 🌅";
+            if (hour < 18) return "Good Afternoon ☀️";
+            return "Good Evening 🌙";
+        }
+        
+        // Initialize on page load
         window.addEventListener('load', function() {
-            displayDailyQuote();
+            displayRandomQuote();
             applyThemeColors();
+            document.getElementById('greeting').textContent = getGreeting() + ' - Fill your Evening Page and count yourself.';
         });
         
         // Set today's date
