@@ -73,7 +73,6 @@
             font-weight: 500;
         }
         
-        /* Daily Quote Section */
         .quote-section {
             background: linear-gradient(135deg, var(--bg-light) 0%, rgba(102, 126, 234, 0.05) 100%);
             border-left: 5px solid var(--primary-color);
@@ -120,7 +119,6 @@
             font-weight: normal;
         }
         
-        /* Color indicator */
         .color-indicator {
             display: inline-block;
             width: 12px;
@@ -182,20 +180,6 @@
             appearance: none;
             background-color: white;
             transition: border-color 0.3s ease;
-        }
-        
-        input[type="text"],
-        input[type="number"],
-        input[type="date"],
-        textarea {
-            font-size: 16px;
-        }
-        
-        select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M0 0l6 8 6-8z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 36px;
         }
         
         input[type="text"]:focus,
@@ -289,29 +273,6 @@
             cursor: pointer;
         }
         
-        .summary-box {
-            background: var(--bg-light);
-            padding: 12px;
-            border-left: 4px solid var(--primary-color);
-            border-radius: 6px;
-            margin: 15px 0;
-            font-weight: 500;
-            color: var(--text-dark);
-            font-size: 14px;
-            word-break: break-word;
-        }
-        
-        /* Reflection items box */
-        .reflection-item {
-            background: #f9f9f9;
-            padding: 12px;
-            border-left: 4px solid var(--primary-color);
-            border-radius: 6px;
-            margin-bottom: 12px;
-            font-size: 13px;
-            color: var(--text-light);
-        }
-        
         .button-group {
             display: flex;
             flex-direction: column;
@@ -392,7 +353,6 @@
             font-weight: 600;
         }
         
-        /* Mobile optimization */
         @media (max-width: 599px) {
             .container {
                 padding: 15px;
@@ -444,7 +404,6 @@
             }
         }
         
-        /* Tablet optimization */
         @media (min-width: 600px) and (max-width: 999px) {
             .container {
                 padding: 25px;
@@ -457,7 +416,6 @@
             }
         }
         
-        /* Desktop optimization */
         @media (min-width: 1000px) {
             .container {
                 padding: 40px;
@@ -476,7 +434,6 @@
             }
         }
         
-        /* Safe area for notch devices */
         @supports (padding: max(0px)) {
             .container {
                 padding: max(20px, env(safe-area-inset-top)) 
@@ -489,7 +446,7 @@
 </head>
 <body>
     <div class="container">
-        <!-- Daily Motivational Quote Section - AT THE BEGINNING -->
+        <!-- QUOTE SECTION - FIRST THING YOU SEE -->
         <div class="quote-section">
             <div class="quote-label">✨ Today's Inspiration</div>
             <div class="quote-text" id="quoteText">Loading today's quote...</div>
@@ -516,7 +473,7 @@
                 </div>
             </div>
             
-            <!-- DAILY REFLECTION: GOOD, BAD & CHANGE -->
+            <!-- TODAY'S REFLECTION SECTION -->
             <div class="form-section">
                 <div class="section-header">🌟 TODAY'S REFLECTION</div>
                 
@@ -800,7 +757,6 @@
     </div>
     
     <script>
-        // Comprehensive quotes database
         const quotes = [
             {
                 text: "An inheritance is easily lost; a habit is almost impossible to lose.",
@@ -894,13 +850,11 @@
             }
         ];
         
-        // Function to get random quote
         function getRandomQuote() {
             const randomIndex = Math.floor(Math.random() * quotes.length);
             return quotes[randomIndex];
         }
         
-        // Function to apply theme colors
         function applyThemeColors() {
             const quote = getRandomQuote();
             document.documentElement.style.setProperty('--primary-color', quote.colorPrimary);
@@ -908,14 +862,12 @@
             document.documentElement.style.setProperty('--accent-color', quote.colorPrimary);
         }
         
-        // Function to display random quote
         function displayRandomQuote() {
             const quote = getRandomQuote();
             document.getElementById('quoteText').textContent = `"${quote.text}"`;
             document.getElementById('quoteAuthor').textContent = quote.author;
         }
         
-        // Function to get greeting based on time of day
         function getGreeting() {
             const hour = new Date().getHours();
             if (hour < 12) return "Good Morning 🌅";
@@ -923,14 +875,12 @@
             return "Good Evening 🌙";
         }
         
-        // Initialize on page load
         window.addEventListener('load', function() {
             displayRandomQuote();
             applyThemeColors();
             document.getElementById('greeting').textContent = getGreeting() + ' - Fill your Evening Page and count yourself.';
         });
         
-        // Set today's date
         const dateInput = document.getElementById('date');
         const dayOfWeekInput = document.getElementById('dayOfWeek');
         
@@ -951,10 +901,7 @@
             }
         }
         
-        // Initialize on load
         setTodayDate();
-        
-        // Update when date changes
         dateInput.addEventListener('change', updateDayOfWeek);
     </script>
 </body>
