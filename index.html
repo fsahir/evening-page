@@ -2,57 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Daily Evening Page</title>
+    <meta name="apple-mobile-web-app-capable" content="true">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#667eea">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: #333;
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            padding: 0;
+            margin: 0;
+            overflow-x: hidden;
         }
         
         .container {
-            max-width: 800px;
+            width: 100%;
+            max-width: 900px;
             margin: 0 auto;
             background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 0;
         }
         
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #667eea;
+            margin-bottom: 25px;
             padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
         }
         
         .header h1 {
-            font-size: 28px;
+            font-size: 24px;
             color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            word-break: break-word;
         }
         
         .header p {
             color: #666;
-            font-size: 14px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .form-section {
+            margin-bottom: 20px;
         }
         
         .section-header {
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 15px;
+            font-weight: 600;
             color: white;
             background: #667eea;
             padding: 12px 15px;
-            margin: 25px 0 15px 0;
+            margin-bottom: 15px;
             border-radius: 6px;
+            word-break: break-word;
         }
         
         label {
@@ -61,6 +83,11 @@
             color: #333;
             margin-bottom: 8px;
             font-size: 14px;
+            line-height: 1.3;
+        }
+        
+        .input-wrapper {
+            margin-bottom: 15px;
         }
         
         input[type="text"],
@@ -73,14 +100,32 @@
             border: 2px solid #ddd;
             border-radius: 6px;
             font-family: inherit;
-            font-size: 14px;
-            margin-bottom: 15px;
+            font-size: 16px;
+            margin: 0;
+            -webkit-appearance: none;
+            appearance: none;
+            background-color: white;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea {
+            font-size: 16px;
+        }
+        
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M0 0l6 8 6-8z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
         }
         
         input[type="text"]:focus,
         input[type="number"]:focus,
         input[type="date"]:focus,
-        textarea:focus {
+        textarea:focus,
+        select:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
@@ -89,22 +134,40 @@
         textarea {
             resize: vertical;
             min-height: 80px;
+            font-family: inherit;
         }
         
         .row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        @media (min-width: 600px) {
+            .row {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 15px;
+            font-size: 14px;
+            overflow-x: auto;
+            display: block;
+        }
+        
+        @media (max-width: 599px) {
+            table {
+                font-size: 12px;
+            }
         }
         
         th, td {
-            padding: 12px;
+            padding: 10px;
             text-align: left;
             border: 1px solid #ddd;
         }
@@ -119,49 +182,82 @@
             background: #fafafa;
         }
         
+        td input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
         .radio-group {
             display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 8px 0 15px 0;
         }
         
         .radio-group label {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             margin: 0;
             font-weight: normal;
+            font-size: 14px;
         }
         
         .radio-group input[type="radio"] {
             width: auto;
+            margin: 0;
+            cursor: pointer;
         }
         
         .summary-box {
             background: #f0f4ff;
-            padding: 15px;
+            padding: 12px;
             border-left: 4px solid #667eea;
             border-radius: 6px;
-            margin-bottom: 15px;
+            margin: 15px 0;
             font-weight: 500;
             color: #333;
+            font-size: 14px;
+            word-break: break-word;
         }
         
         .button-group {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             margin-top: 30px;
-            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        @media (min-width: 600px) {
+            .button-group {
+                flex-direction: row;
+                justify-content: center;
+                gap: 10px;
+            }
         }
         
         button {
-            padding: 12px 30px;
+            padding: 14px 24px;
             font-size: 16px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        @media (min-width: 600px) {
+            button {
+                width: auto;
+                min-width: 150px;
+            }
         }
         
         .btn-submit {
@@ -169,15 +265,22 @@
             color: white;
         }
         
+        .btn-submit:active {
+            background: #5568d3;
+            transform: scale(0.98);
+        }
+        
         .btn-submit:hover {
             background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
         }
         
         .btn-reset {
             background: #e0e0e0;
             color: #333;
+        }
+        
+        .btn-reset:active {
+            background: #d0d0d0;
         }
         
         .btn-reset:hover {
@@ -190,24 +293,100 @@
             padding-top: 20px;
             border-top: 1px solid #ddd;
             color: #666;
-            font-size: 13px;
+            font-size: 12px;
+            line-height: 1.5;
+            word-break: break-word;
         }
         
-        @media (max-width: 600px) {
+        .footer em {
+            display: block;
+            margin-top: 10px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        /* Mobile optimization */
+        @media (max-width: 599px) {
             .container {
-                padding: 20px;
+                padding: 15px;
+                border-radius: 0;
+                min-height: 100vh;
             }
             
-            .row {
-                grid-template-columns: 1fr;
+            .header h1 {
+                font-size: 20px;
             }
             
-            .button-group {
-                flex-direction: column;
+            .header p {
+                font-size: 12px;
+            }
+            
+            .section-header {
+                font-size: 14px;
+                padding: 10px 12px;
+                margin-bottom: 12px;
+            }
+            
+            label {
+                font-size: 13px;
+                margin-bottom: 6px;
+            }
+            
+            input[type="text"],
+            input[type="number"],
+            input[type="date"],
+            textarea {
+                padding: 12px;
+                font-size: 16px;
+                border-radius: 6px;
             }
             
             button {
+                padding: 12px 20px;
+                font-size: 15px;
                 width: 100%;
+            }
+        }
+        
+        /* Tablet optimization */
+        @media (min-width: 600px) and (max-width: 999px) {
+            .container {
+                padding: 25px;
+                margin: 20px auto;
+                border-radius: 8px;
+            }
+            
+            .header h1 {
+                font-size: 26px;
+            }
+        }
+        
+        /* Desktop optimization */
+        @media (min-width: 1000px) {
+            .container {
+                padding: 40px;
+                margin: 30px auto;
+                border-radius: 12px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+            }
+        }
+        
+        /* Safe area for notch devices */
+        @supports (padding: max(0px)) {
+            .container {
+                padding: max(20px, env(safe-area-inset-top)) 
+                         max(20px, env(safe-area-inset-right)) 
+                         max(20px, env(safe-area-inset-bottom)) 
+                         max(20px, env(safe-area-inset-left));
             }
         }
     </style>
@@ -219,30 +398,36 @@
             <p>Personal Accountability Form</p>
         </div>
         
-        <form action="https://formspree.io/f/mjgbjang" method="POST">
+        <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
             <!-- DATE SECTION -->
-            <div class="row">
-                <div>
-                    <label for="date">📅 Date:</label>
-                    <input type="date" id="date" name="date" required>
-                </div>
-                <div>
-                    <label for="dayOfWeek">Day of Week:</label>
-                    <input type="text" id="dayOfWeek" name="dayOfWeek" placeholder="e.g., Monday" required>
+            <div class="form-section">
+                <div class="row">
+                    <div class="input-wrapper">
+                        <label for="date">📅 Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="input-wrapper">
+                        <label for="dayOfWeek">Day of Week</label>
+                        <input type="text" id="dayOfWeek" name="dayOfWeek" placeholder="Monday" required>
+                    </div>
                 </div>
             </div>
             
             <!-- FINANCIAL ACCOUNTABILITY -->
-            <div>
+            <div class="form-section">
                 <div class="section-header">💰 FINANCIAL ACCOUNTABILITY</div>
                 
-                <label>Salary/Primary Income (৳):</label>
-                <input type="number" name="salaryIncome" placeholder="0" step="0.01">
+                <div class="input-wrapper">
+                    <label>Salary/Primary Income (৳)</label>
+                    <input type="number" name="salaryIncome" placeholder="0" step="0.01">
+                </div>
                 
-                <label>Side Income/Additional (৳):</label>
-                <input type="number" name="sideIncome" placeholder="0" step="0.01">
+                <div class="input-wrapper">
+                    <label>Side Income/Additional (৳)</label>
+                    <input type="number" name="sideIncome" placeholder="0" step="0.01">
+                </div>
                 
-                <label style="margin-top: 15px;">Where did I spend it?</label>
+                <label style="margin-top: 10px;">Where did I spend it?</label>
                 <table>
                     <thead>
                         <tr>
@@ -307,7 +492,7 @@
             </div>
             
             <!-- TIME ACCOUNTABILITY -->
-            <div>
+            <div class="form-section">
                 <div class="section-header">⏰ TIME ACCOUNTABILITY</div>
                 
                 <label>How did I spend my time today? (hours)</label>
@@ -316,7 +501,7 @@
                         <tr>
                             <th>Activity</th>
                             <th>Hours</th>
-                            <th>Productive?</th>
+                            <th style="font-size: 12px;">Productive?</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -393,81 +578,105 @@
                     </tbody>
                 </table>
                 
-                <label>One regret about my time today:</label>
-                <textarea name="timeRegret" placeholder="What would you do differently?"></textarea>
+                <div class="input-wrapper">
+                    <label>One regret about my time today</label>
+                    <textarea name="timeRegret" placeholder="What would you do differently?"></textarea>
+                </div>
             </div>
             
             <!-- DECISIONS & ACTIONS -->
-            <div>
+            <div class="form-section">
                 <div class="section-header">🎯 DECISIONS & ACTIONS</div>
                 
-                <label>What hard thing did I do today?</label>
-                <textarea name="hardAction" placeholder="Describe the challenge you faced and overcame..."></textarea>
+                <div class="input-wrapper">
+                    <label>What hard thing did I do today?</label>
+                    <textarea name="hardAction" placeholder="Describe the challenge..."></textarea>
+                </div>
                 
-                <label>What did I postpone until tomorrow?</label>
-                <textarea name="postponed" placeholder="What did you delay? Why?"></textarea>
+                <div class="input-wrapper">
+                    <label>What did I postpone until tomorrow?</label>
+                    <textarea name="postponed" placeholder="What did you delay?"></textarea>
+                </div>
                 
-                <label>Was the postponement justified?</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="postponementJustified" value="Yes"> Yes</label>
-                    <label><input type="radio" name="postponementJustified" value="No"> No</label>
-                    <label><input type="radio" name="postponementJustified" value="Partially"> Partially</label>
+                <div class="input-wrapper">
+                    <label>Was the postponement justified?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="postponementJustified" value="Yes"> Yes</label>
+                        <label><input type="radio" name="postponementJustified" value="No"> No</label>
+                        <label><input type="radio" name="postponementJustified" value="Partially"> Partially</label>
+                    </div>
                 </div>
             </div>
             
             <!-- 1% IMPROVEMENT -->
-            <div>
+            <div class="form-section">
                 <div class="section-header">📈 THE 1% IMPROVEMENT QUESTION</div>
                 
-                <label>What did I do 1% better than yesterday?</label>
-                <textarea name="improvement1Percent" placeholder="Even small improvements compound: 1.01^365 ≈ 37x improvement..."></textarea>
+                <div class="input-wrapper">
+                    <label>What did I do 1% better than yesterday?</label>
+                    <textarea name="improvement1Percent" placeholder="1.01^365 ≈ 37x improvement..."></textarea>
+                </div>
                 
-                <label>How will this compound over a year?</label>
-                <textarea name="compoundingThought" placeholder="Think about the long-term impact..."></textarea>
+                <div class="input-wrapper">
+                    <label>How will this compound over a year?</label>
+                    <textarea name="compoundingThought" placeholder="Think about the long-term impact..."></textarea>
+                </div>
             </div>
             
             <!-- REFLECTION & INSIGHT -->
-            <div>
+            <div class="form-section">
                 <div class="section-header">🧠 REFLECTION & INSIGHT</div>
                 
-                <label>Morning Goal (what I planned):</label>
-                <textarea name="morningGoal" placeholder="What did you intend to accomplish?"></textarea>
+                <div class="input-wrapper">
+                    <label>Morning Goal (what I planned)</label>
+                    <textarea name="morningGoal" placeholder="What did you intend to accomplish?"></textarea>
+                </div>
                 
-                <label>Evening Report (what actually happened):</label>
-                <textarea name="eveningReport" placeholder="How did the day actually unfold?"></textarea>
+                <div class="input-wrapper">
+                    <label>Evening Report (what actually happened)</label>
+                    <textarea name="eveningReport" placeholder="How did the day actually unfold?"></textarea>
+                </div>
                 
-                <label>Connection between goal and outcome:</label>
-                <textarea name="goalConnection" placeholder="How did your plans align with reality?"></textarea>
+                <div class="input-wrapper">
+                    <label>Connection between goal and outcome</label>
+                    <textarea name="goalConnection" placeholder="How did your plans align with reality?"></textarea>
+                </div>
             </div>
             
             <!-- ONE-LINE CONCLUSION -->
-            <div>
+            <div class="form-section">
                 <div class="section-header">📝 ONE-LINE CONCLUSION</div>
                 
-                <label>Summary of today:</label>
-                <textarea name="summary" placeholder="Condense your day into one powerful statement..."></textarea>
+                <div class="input-wrapper">
+                    <label>Summary of today</label>
+                    <textarea name="summary" placeholder="Condense your day into one powerful statement..."></textarea>
+                </div>
                 
-                <label>What will I change tomorrow?</label>
-                <textarea name="changeTomorrow" placeholder="Your commitment for the next day..."></textarea>
+                <div class="input-wrapper">
+                    <label>What will I change tomorrow?</label>
+                    <textarea name="changeTomorrow" placeholder="Your commitment for the next day..."></textarea>
+                </div>
             </div>
             
             <!-- ACCOUNTABILITY PARTNER -->
-            <div>
+            <div class="form-section">
                 <div class="section-header">🔄 ACCOUNTABILITY PARTNER NOTES</div>
                 
                 <div class="row">
-                    <div>
-                        <label>Share this conclusion with:</label>
-                        <input type="text" name="accountabilityPartner" placeholder="Name of accountability partner">
+                    <div class="input-wrapper">
+                        <label for="accountabilityPartner">Share this conclusion with</label>
+                        <input type="text" id="accountabilityPartner" name="accountabilityPartner" placeholder="Name">
                     </div>
-                    <div>
-                        <label>Date shared:</label>
-                        <input type="date" name="shareDate">
+                    <div class="input-wrapper">
+                        <label for="shareDate">Date shared</label>
+                        <input type="date" id="shareDate" name="shareDate">
                     </div>
                 </div>
                 
-                <label>Their observation/feedback:</label>
-                <textarea name="partnerFeedback" placeholder="What did your accountability partner notice?"></textarea>
+                <div class="input-wrapper">
+                    <label>Their observation/feedback</label>
+                    <textarea name="partnerFeedback" placeholder="What did they notice?"></textarea>
+                </div>
             </div>
             
             <!-- SUBMIT BUTTON -->
@@ -479,25 +688,37 @@
         
         <div class="footer">
             <p><strong>Weekly Reminder:</strong> After 7 days, review all entries. After 30 days, notice the patterns. After 365 days, you will have a complete map of your own actions.</p>
-            <p style="margin-top: 10px;"><em>"An inheritance is easily lost; a habit is almost impossible to lose."</em></p>
+            <em>"An inheritance is easily lost; a habit is almost impossible to lose."</em>
         </div>
     </div>
     
     <script>
         // Set today's date
-        document.getElementById('date').valueAsDate = new Date();
+        const dateInput = document.getElementById('date');
+        const dayOfWeekInput = document.getElementById('dayOfWeek');
         
-        // Update day of week when date changes
-        document.getElementById('date').addEventListener('change', function() {
-            const date = new Date(this.value);
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            document.getElementById('dayOfWeek').value = days[date.getDay()];
-        });
+        function setTodayDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            dateInput.value = `${year}-${month}-${day}`;
+            updateDayOfWeek();
+        }
         
-        // Update day of week on load
-        const today = new Date();
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        document.getElementById('dayOfWeek').value = days[today.getDay()];
+        function updateDayOfWeek() {
+            if (dateInput.value) {
+                const date = new Date(dateInput.value + 'T00:00:00');
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                dayOfWeekInput.value = days[date.getDay()];
+            }
+        }
+        
+        // Initialize on load
+        setTodayDate();
+        
+        // Update when date changes
+        dateInput.addEventListener('change', updateDayOfWeek);
     </script>
 </body>
 </html>
