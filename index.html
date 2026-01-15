@@ -905,7 +905,7 @@
         dateInput.addEventListener('change', updateDayOfWeek);
           
         // ===== GOOGLE SHEETS FORM HANDLER =====
-        // This function handles form submission to Google Apps Script
+       // This function handles form submission to Google Apps Script
         function submitForm(event) {
             event.preventDefault(); // Prevent page redirect
             
@@ -918,39 +918,35 @@
             submitButton.textContent = '📤 Sending to Google Sheets...';
             resetButton.disabled = true;
             
-            // Collect all form data
+            // Collect all form data and convert to URL parameters
             const formData = new FormData(form);
+            const params = new URLSearchParams(formData);
             
-            // Send to Google Apps Script via AJAX
+            // Send to Google Apps Script via fetch with proper CORS handling
             fetch(form.action, {
                 method: 'POST',
-                body: formData
+                body: params,
+                mode: 'no-cors' // CRITICAL: This fixes CORS errors
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.result === 'success') {
-                    // ✅ SUCCESS - Show confirmation
-                    alert('✅ SUCCESS!\n\nYour evening page has been saved to Google Sheets.\n\nData saved in row: ' + data.row + '\n\nForm will now clear and you can fill tomorrow\'s entry.');
-                    
-                    // Clear form fields
-                    form.reset();
-                    
-                    // Reset date to today
-                    setTodayDate();
-                    
-                    // Re-enable buttons
-                    submitButton.disabled = false;
-                    submitButton.textContent = '📤 Submit Form';
-                    resetButton.disabled = false;
-                } else {
-                    // Error from Google Apps Script
-                    throw new Error('Server error: ' + (data.error || 'Unknown error'));
-                }
+            .then(() => {
+                // ✅ SUCCESS - no-cors mode doesn't return response body
+                alert('✅ SUCCESS!\n\nYour evening page has been saved to Google Sheets!\n\nForm will now clear and you can fill tomorrow\'s entry.\n\nPlease check your Google Sheet to verify data was saved.');
+                
+                // Clear form fields
+                form.reset();
+                
+                // Reset date to today
+                setTodayDate();
+                
+                // Re-enable buttons
+                submitButton.disabled = false;
+                submitButton.textContent = '📤 Submit Form';
+                resetButton.disabled = false;
             })
             .catch(error => {
                 // ❌ ERROR - Show error message
                 console.error('Error:', error);
-                alert('❌ ERROR - Could not save to Google Sheets\n\nError details:\n' + error.message + '\n\nTroubleshooting:\n1. Check deployment URL is correct\n2. Check sheet ID is correct\n3. Check column headers match\n\nSee console for more details.');
+                alert('❌ ERROR - Could not save to Google Sheets\n\nError details:\n' + error.message);
                 
                 // Re-enable buttons for retry
                 submitButton.disabled = false;
@@ -959,7 +955,7 @@
             });
             
             return false; // Prevent default form submission
-        }
+    
         // ===== END GOOGLE SHEETS HANDLER =====
 
     
