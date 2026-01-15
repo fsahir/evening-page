@@ -458,7 +458,7 @@
             <p id="greeting">Good Evening 👋 - Fill your Evening Page and count yourself.</p>
         </div>
         
-        <form action="https://script.google.com/macros/s/AKfycbxeNYpojHg7hxM9B4FEf7A1sQ18svGy11-7udd8OD9aAN0o5ZzDPtidwfQRITvuPjaT/exec" method="POST" id="eveningForm" onsubmit="return submitForm(event)">
+        <form action="https://formspree.io/f/xvzzgbpy" method="POST">
             <!-- DATE SECTION -->
             <div class="form-section">
                 <div class="row">
@@ -903,62 +903,6 @@
         
         setTodayDate();
         dateInput.addEventListener('change', updateDayOfWeek);
-          
-        // ===== GOOGLE SHEETS FORM HANDLER =====
-       // This function handles form submission to Google Apps Script
-        function submitForm(event) {
-            event.preventDefault(); // Prevent page redirect
-            
-            const form = document.getElementById('eveningForm');
-            const submitButton = form.querySelector('.btn-submit');
-            const resetButton = form.querySelector('.btn-reset');
-            
-            // Show loading state
-            submitButton.disabled = true;
-            submitButton.textContent = '📤 Sending to Google Sheets...';
-            resetButton.disabled = true;
-            
-            // Collect all form data and convert to URL parameters
-            const formData = new FormData(form);
-            const params = new URLSearchParams(formData);
-            
-            // Send to Google Apps Script via fetch with proper CORS handling
-            fetch(form.action, {
-                method: 'POST',
-                body: params,
-                mode: 'no-cors' // CRITICAL: This fixes CORS errors
-            })
-            .then(() => {
-                // ✅ SUCCESS - no-cors mode doesn't return response body
-                alert('✅ SUCCESS!\n\nYour evening page has been saved to Google Sheets!\n\nForm will now clear and you can fill tomorrow\'s entry.\n\nPlease check your Google Sheet to verify data was saved.');
-                
-                // Clear form fields
-                form.reset();
-                
-                // Reset date to today
-                setTodayDate();
-                
-                // Re-enable buttons
-                submitButton.disabled = false;
-                submitButton.textContent = '📤 Submit Form';
-                resetButton.disabled = false;
-            })
-            .catch(error => {
-                // ❌ ERROR - Show error message
-                console.error('Error:', error);
-                alert('❌ ERROR - Could not save to Google Sheets\n\nError details:\n' + error.message);
-                
-                // Re-enable buttons for retry
-                submitButton.disabled = false;
-                submitButton.textContent = '📤 Submit Form';
-                resetButton.disabled = false;
-            });
-            
-            return false; // Prevent default form submission
-    
-        // ===== END GOOGLE SHEETS HANDLER =====
-
-    
     </script>
 </body>
 </html>
